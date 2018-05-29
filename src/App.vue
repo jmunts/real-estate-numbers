@@ -1,25 +1,93 @@
 <template>
-  <v-app id="app">
+  <v-app dark>
     <v-content>
-      <img src="./assets/logo.png">
-      <router-view/>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4>
+            <v-card class="elevation-12">
+              <v-toolbar dark>
+                <v-toolbar-title>
+                  Amortization Calculator
+                </v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <v-container grid-list-md>
+                    <v-layout row wrap>
+                      <v-flex xs12>
+                        <v-text-field
+                          label="Bid Price"
+                          prefix="₱"
+                          value="0"
+                          v-model="price"
+                        />
+                      </v-flex>
+                      <v-flex xs12 md4>
+                        <v-text-field
+                          label="Downpayment"
+                          suffix="%"
+                          v-model="downpaymentPct"
+                        />
+                      </v-flex>
+                      <v-flex xs12 md4>
+                        <v-text-field
+                          label="Interest rate"
+                          suffix="%"
+                          v-model="interestRate"
+                        />
+                      </v-flex>
+                      <v-flex xs12 md4>
+                        <v-text-field
+                          label="Payable in?"
+                          v-model="payableInYears"
+                          suffix="year(s)"
+                        />
+                      </v-flex>
+                      <v-flex xs12 v-if="showMonthlyAmortization">
+                        <p>Monthly Amortization: ₱ {{ monthlyAmortization | toCurrency }}</p>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </v-content>
-  </v-app>  
+  </v-app>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      price: 1703000,
+      downpaymentPct: 10,
+      interestRate: 13,
+      payableInYears: 15,
+      amortizationFactorRateTable: [
+        // TODO
+      ],
+      amortizationFactorRate: 0.012652422
+    }
+  },
+  computed: {
+    showMonthlyAmortization () {
+      return this.price !== '' && this.downpaymentPct !== '' && this.payableInYears !== '' && this.interestRate !== ''
+    },
+    monthlyAmortization () {
+      // TODO: when amortizationFactorRate is ready do: netPrice * amortizationFactorRate
+      var downpaymentPrice = this.price * (this.downpaymentPct / 100)
+      var netPrice = this.price - downpaymentPrice
+      return netPrice * this.amortizationFactorRate
+    }
+  },
+  filters: {
+    toCurrency (value) {
+      return value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+    }
+  }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
