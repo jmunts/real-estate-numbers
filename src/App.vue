@@ -66,10 +66,10 @@ export default {
   name: 'App',
   data () {
     return {
-      price: 1703000,
-      downpaymentPct: 10,
-      payableInYears: 15,
-      interestRate: '13.0',
+      price: '',
+      downpaymentPct: '',
+      payableInYears: '',
+      interestRate: '',
       amortizationFactorRateTable: amortizationFactorRateTable
     }
   },
