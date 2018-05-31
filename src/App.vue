@@ -80,6 +80,7 @@ export default {
       return netPrice * this.amortizationFactorRate
     },
     amortizationFactorRate () {
+      // Formula is based here: http://gprrealty.weebly.com/realty-tips/how-to-compute-the-monthly-amortization
       let interest = (this.interestRate / 100) / 12
       let dividend = interest
       let termMonths = this.payableInYears * 12
